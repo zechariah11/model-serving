@@ -6,7 +6,7 @@ why they differ. Wrong predictions are the useful ones; don't edit them afterwar
 ## Phase 1
 
 ### Step 2 — Why p99 and not the average?
-
+p99 metric is extremely significant because average as a metric does not capture the full picture of the distribution of latency. For instance, you could have 99 users with 1 ms response time and 1 user with 100 ms response time. In this instance, the average response time would be 1.99 ms. However, this single user would have a relatively degraded experience due to tail latency. This is the reason why p99 metric should be focused on as well.
 
 
 ### Step 3 — Looking at the stream
