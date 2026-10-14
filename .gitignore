@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# Downloaded binaries and model weights (large, not source code)
+bin/
+models/
+*.gguf
