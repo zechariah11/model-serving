@@ -2,15 +2,15 @@
   "name": "model-serving",
   "image": "mcr.microsoft.com/devcontainers/python:3.12",
   "hostRequirements": { "cpus": 2 },
-  "features": {
-    "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
-  },
   "remoteEnv": { "PATH": "${containerEnv:PATH}:/home/vscode/.local/bin" },
-  "postCreateCommand": "pip install --user uv && ~/.local/bin/uv sync",
+  "postCreateCommand": {
+    "python": "pip install --user uv && ~/.local/bin/uv sync",
+    "claude": "curl -fsSL https://claude.ai/install.sh | bash"
+  },
   "forwardPorts": [8080, 8000],
   "customizations": {
     "vscode": {
-      "extensions": ["ms-python.python"]
+      "extensions": ["ms-python.python", "anthropic.claude-code"]
     }
   }
 }

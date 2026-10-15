@@ -97,7 +97,8 @@ are steps you haven't reached. Red means something you wrote fails.
 
 | Problem | Fix |
 |---|---|
-| The `claude` command isn't found | The Codespace was created before this setup. Rebuild it (setup step 1). |
+| The `claude` command isn't found | Run `curl -fsSL https://claude.ai/install.sh \| bash`, then open a new terminal. (Setup installs it automatically, but a Codespace made before that change won't have it.) |
+| "Running in recovery mode" | The setup config failed to build. In the recovery terminal run `git pull`, then Command Palette → **Codespaces: Full Rebuild Container**. If it happens again, run `grep -n -iE "error\|fail" /workspaces/.codespaces/.persistedshare/creation.log` and share the output. |
 | `git push` is rejected ("fetch first") | Run `git pull`, then `git push`. |
 | A merge conflict in `docs/progress.md` | Take the incoming version: `git checkout --theirs docs/progress.md`, then commit. |
 | Tests changed and something you'd finished is red | Claude added a test for a case you missed. The review will say which, and why. |
