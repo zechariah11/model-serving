@@ -2,9 +2,10 @@
 
 Your own computer only needs a browser. Everything runs in the cloud.
 
-Free tiers change often, and several numbers below come from third-party write-ups,
-not the providers. They were checked in October 2026. **Confirm on the provider's
-own page before you rely on one.**
+**Last verified: 2026-10-14.** Free tiers change often, and several numbers below
+come from third-party write-ups, not the providers. **Confirm on the provider's
+own page before you rely on one.** Claude re-checks these before you reach a step
+that uses them.
 
 | Use it for | Service | Free allowance | Catches |
 |---|---|---|---|

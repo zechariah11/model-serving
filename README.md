@@ -12,8 +12,10 @@ version of what model API providers run.
   run the experiment, then explain the gap. The gap is where the learning is.
 - **Tests define "done"** for each coding step. Start red, make it green.
 - **Every phase ends with a short write-up** in `results/`. That's the portfolio.
-- **Stuck for 30+ minutes?** Ask Claude for a *hint*, not the answer, and say
-  what you've tried.
+- **Push, then ask for a review.** Claude pulls your work, runs the tests, and
+  replies with hints, not fixes. How it works: [`docs/workflow.md`](docs/workflow.md).
+- **Stuck for 30+ minutes?** Ask for a hint and say what you've tried. You choose
+  how much help you get.
 
 ## Roadmap
 
@@ -30,12 +32,14 @@ written when you reach them, shaped by what you found in the earlier ones.
 
 ## Start here
 
-1. Read [`docs/compute.md`](docs/compute.md) to see where this runs for free.
+1. Read [`docs/compute.md`](docs/compute.md) to see where this runs for free, and
+   [`docs/concepts.md`](docs/concepts.md) for how the pieces fit together.
 2. Open a Codespace on the `model-serving` branch: on GitHub, **Code → Codespaces →
    Create codespace on model-serving**. Setup runs by itself.
-3. In its terminal, run `uv run pytest`. You should see 19 failures. Making them
-   pass is your Phase 1 coding work.
-4. Follow [`docs/phase-1.md`](docs/phase-1.md).
+3. In its terminal, run `uv run pytest -rs`. Tests for work you haven't started
+   show as "not started yet". Turning them green is your Phase 1 coding work.
+4. Follow [`docs/phase-1.md`](docs/phase-1.md). Where you are right now is in
+   [`docs/progress.md`](docs/progress.md).
 
 ## Layout
 
@@ -44,7 +48,8 @@ loadgen/        the load generator; you fill in client.py, stats.py, run.py
 fakeserver/     a fake LLM server with knobs you control (done for you)
 tests/          what "correct" means for each step
 scripts/        downloads llama.cpp and a small model
-docs/           compute options and step-by-step guides
+docs/           guides, concepts, workflow, and your progress log
 results/        your measurements and write-ups
 journal.md      predictions vs reality
+CLAUDE.md       instructions Claude follows as your mentor
 ```

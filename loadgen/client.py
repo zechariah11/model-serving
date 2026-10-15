@@ -44,7 +44,8 @@ async def send_one(
     Rules:
       - Time with time.perf_counter(), not time.time(). (Find out why.)
       - The first token is the first chunk whose delta has non-empty "content".
-        Some chunks carry no text; they don't count.
+        Some chunks carry no text; they don't count. If the whole stream had
+        no text, the request still succeeded: ok=True, ttft_s=None, n_tokens=0.
       - Never raise. If anything goes wrong (connection refused, error status,
         timeout), return RequestResult(ok=False, error=<short description>).
         A load test that crashes on its first error measures nothing.

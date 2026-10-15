@@ -54,6 +54,8 @@ def summarize(results: list[RequestResult], concurrency: int, wall_s: float) -> 
     """Build a Summary from one run.
 
     - Only successful requests count toward the timings and the token total.
+    - A successful request with no text has ttft_s = None. Leave it out of the
+      TTFT numbers, but keep it in latency.
     - Time per output token for one request = (total_s - ttft_s) / (n_tokens - 1).
       Skip requests with fewer than 2 tokens when computing it.
     - If there is nothing to take a percentile of (say, every request failed),

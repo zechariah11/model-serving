@@ -5,9 +5,9 @@ import httpx
 from loadgen.client import send_one
 
 
-def send(url, max_tokens=20):
+def send(url, max_tokens=20, timeout_s=30):
     async def go():
-        async with httpx.AsyncClient(timeout=30) as client:
+        async with httpx.AsyncClient(timeout=timeout_s) as client:
             return await send_one(client, url, "fake", "hi", max_tokens)
 
     return asyncio.run(go())
@@ -45,3 +45,19 @@ def test_error_status_is_a_failure(start_fake_server):
     r = send(start_fake_server() + "/wrong-path")
     assert not r.ok
     assert r.error
+
+
+def test_single_token_reply(start_fake_server):
+    r = send(start_fake_server(slots=1, prefill_ms=50, token_ms=5), max_tokens=1)
+    assert r.ok, r.error
+    assert r.n_tokens == 1
+    assert r.total_s >= r.ttft_s
+
+
+def test_timeout_is_returned_not_raised(start_fake_server):
+    # The server goes quiet for 2 s after its first (empty) chunk; the client
+    # gives up after 0.3 s of silence.
+    r = send(start_fake_server(slots=1, prefill_ms=2000, token_ms=5), timeout_s=0.3)
+    assert not r.ok
+    assert r.error
+    assert r.total_s < 1.5  # it gave up, it didn't sit through the whole wait

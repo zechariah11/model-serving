@@ -8,6 +8,21 @@ import uvicorn
 from fakeserver.app import create_app
 
 
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    """Report tests for steps you haven't started as skipped, not failed.
+
+    A test that hits a NotImplementedError is waiting on a TODO function, so it
+    shows up as "not started yet". Every other failure is real and stays red.
+    """
+    outcome = yield
+    report = outcome.get_result()
+    if call.when == "call" and call.excinfo is not None and call.excinfo.errisinstance(NotImplementedError):
+        todo = call.excinfo.traceback[-1].name
+        report.outcome = "skipped"
+        report.longrepr = (str(item.path), item.location[1], f"not started yet: {todo}()")
+
+
 @pytest.fixture
 def start_fake_server():
     """Start a fake server in the background and return its base URL."""
