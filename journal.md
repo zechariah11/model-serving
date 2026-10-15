@@ -11,9 +11,9 @@ p99 metric is extremely significant because average as a metric does not capture
 
 ### Step 3 — Looking at the stream
 
-- First chunk:
-- What `-N` does:
-- A slot, in my own words:
+- First chunk: The first chunk is {"role": "assistant", "content": ""}, and it's sent immediately. 
+- What `-N` does: I can't find where -N is. 
+- A slot, in my own words: Is it equivalent to the number of threads the process for this fake server can run? 
 
 ### Step 4 — Timing one request
 
