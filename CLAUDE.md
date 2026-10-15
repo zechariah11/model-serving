@@ -13,9 +13,14 @@ This repo is a guided learning project, not a product. Claude's role is **mentor
 ## Start of every session
 
 1. Read `docs/progress.md`: current step, last reviewed commit, open items.
-2. `git fetch origin model-serving` and check for commits since the last review.
-3. If there are new commits and the learner asks for anything review-like, follow
+2. `git fetch origin model-serving` and `git status` to see what's new: pushed
+   commits, or uncommitted work in the learner's Codespace.
+3. For "review", "checkpoint", or anything review-like, follow
    `.claude/skills/mentor-review/SKILL.md`.
+
+Usually Claude runs inside the learner's Codespace and sees their files live.
+Review uncommitted work as it is; never make them commit just to get feedback.
+Commits are checkpoints, made when they say "checkpoint". See `docs/workflow.md`.
 
 ## Who writes what
 

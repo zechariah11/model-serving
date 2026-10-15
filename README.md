@@ -12,8 +12,9 @@ version of what model API providers run.
   run the experiment, then explain the gap. The gap is where the learning is.
 - **Tests define "done"** for each coding step. Start red, make it green.
 - **Every phase ends with a short write-up** in `results/`. That's the portfolio.
-- **Push, then ask for a review.** Claude pulls your work, runs the tests, and
-  replies with hints, not fixes. How it works: [`docs/workflow.md`](docs/workflow.md).
+- **Claude works inside your Codespace.** Say "review" any time; it reads your
+  files as they are, runs the tests, and replies with hints, not fixes. No
+  commits needed. How it works: [`docs/workflow.md`](docs/workflow.md).
 - **Stuck for 30+ minutes?** Ask for a hint and say what you've tried. You choose
   how much help you get.
 
@@ -35,9 +36,11 @@ written when you reach them, shaped by what you found in the earlier ones.
 1. Read [`docs/compute.md`](docs/compute.md) to see where this runs for free, and
    [`docs/concepts.md`](docs/concepts.md) for how the pieces fit together.
 2. Open a Codespace on the `model-serving` branch: on GitHub, **Code → Codespaces →
-   Create codespace on model-serving**. Setup runs by itself.
-3. In its terminal, run `uv run pytest -rs`. Tests for work you haven't started
-   show as "not started yet". Turning them green is your Phase 1 coding work.
+   Create codespace on model-serving**. Setup runs by itself, including Claude
+   Code. Run `claude` once to sign in.
+3. In its terminal, run `uv run ptw .` It reruns the tests every time you save.
+   Tests for work you haven't started show as "not started yet". Turning them
+   green is your Phase 1 coding work.
 4. Follow [`docs/phase-1.md`](docs/phase-1.md). Where you are right now is in
    [`docs/progress.md`](docs/progress.md).
 

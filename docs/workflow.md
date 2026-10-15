@@ -1,38 +1,68 @@
-# Working with Claude: push, get feedback, keep going
+# Working with Claude
 
-## The daily loop
+Claude runs **inside your Codespace**, next to your code. It sees your files as
+you save them, so getting feedback takes no commits, no pushes, and no
+copy-pasting.
 
-```bash
-git pull                      # 1. get any test or doc updates and review notes
-# 2. work on the current step
-uv run pytest -rs             # 3. check it
-git add -A
-git commit -m "step 3: answer stream questions"   # 4. start the message with the step
-git push                      # 5. push
+## One-time setup (5 minutes)
+
+1. **Rebuild your Codespace** so it picks up Claude Code: open the Command
+   Palette (`Ctrl+Shift+P`, or `Cmd+Shift+P` on a Mac), then run
+   **Codespaces: Rebuild Container**. A brand-new Codespace has it already.
+2. **Sign in once:** open the terminal, run `claude`, and follow the browser
+   prompt. If the browser finishes but the terminal keeps waiting, copy the code
+   the browser shows and paste it into the terminal.
+
+You can then use Claude either from the **Claude Code panel** in the editor
+(look for the Claude icon in the sidebar) or by typing `claude` in a terminal.
+
+Your sign-in survives stopping and starting the Codespace. A rebuild clears it,
+so sign in again after one. To skip that, run `claude setup-token` and save the
+token as a [Codespaces secret](https://github.com/settings/codespaces) named
+`CLAUDE_CODE_OAUTH_TOKEN`.
+
+## The loop
+
+Keep two things open:
+
+```
+┌─ terminal: test watcher ────────────┐  ┌─ Claude panel ──────────────────┐
+│ uv run ptw .                        │  │ you: review                     │
+│                                     │  │ Claude: Status / What's good /  │
+│ reruns the tests every time you     │  │   Issues (hints) / Think about /│
+│ save a file                         │  │   Next                          │
+└─────────────────────────────────────┘  └─────────────────────────────────┘
 ```
 
-6. In a Claude Code session on this repo, say **"review"** (or run `/mentor-review`).
+1. Start the watcher once: `uv run ptw .` It reruns the tests on every save, so
+   you see red/green within seconds.
+2. Work on the step. Save often.
+3. When you want feedback, type **"review"** in the Claude panel. Claude reads
+   what you have right now, saved but not committed, runs the tests, and replies.
+4. Ask anything in between: "why is this test failing?", "explain asyncio.gather",
+   "is my journal answer right?". It already knows which step you're on.
 
-That's it. You don't need to paste code or explain what changed.
+## When to commit
 
-## What happens when you ask for a review
+Commits become **checkpoints**, not a messaging system:
 
-Claude will:
-1. Pull your latest commits and look at everything since the last review.
-2. Run the tests and note what's passing, failing, or not started.
-3. Read your code *and* your journal answers.
-4. Try edge cases the tests don't cover, without fixing your code.
-5. Reply in chat in this shape:
-   - **Status:** what passes, what's next
-   - **What's good:** specific things you did well
-   - **Issues:** bugs or gaps, each with a hint, not a fix
-   - **Think about:** one question that pushes your understanding further
-   - **Next:** what to do now
-6. Update [`progress.md`](progress.md) with where you are and what's still open,
-   and push that. (That's why step 1 of the loop is `git pull`.)
+- **When a step is done,** say "checkpoint step 3". Claude commits your work with
+  a clear message, updates `docs/progress.md`, and pushes. CI then confirms it
+  on GitHub.
+- **Before you stop for the day,** so your work is saved off the Codespace.
 
-Any new session reads `progress.md` first, so you can pick up from any session
-without re-explaining.
+You can still commit by hand any time. Practicing git is worthwhile.
+
+## What a review looks like
+
+- **Status:** what passes, what's next
+- **What's good:** specific things you did well
+- **Issues:** bugs or gaps, each with a hint, not a fix
+- **Think about:** one question that pushes your understanding further
+- **Next:** what to do now
+
+Claude also keeps [`progress.md`](progress.md) current, so any session, in any
+Codespace or on claude.ai, picks up where you left off.
 
 ## How hints work
 
@@ -49,34 +79,25 @@ further if you ask:
 Use level 4 when you're truly stuck or short on time, not as a habit. It's fine
 to use it; the point is that it's your choice.
 
-## CI: feedback on every push
+## CI: a second opinion on every push
 
-GitHub runs the tests on every push (see the **Actions** tab, or the ✓/✗ next to
-each commit):
+GitHub runs the tests on every push (the ✓/✗ next to each commit, or the
+**Actions** tab). Green means everything you've started passes; skipped tests
+are steps you haven't reached. Red means something you wrote fails.
 
-- **Green:** everything you've started passes. Tests for steps you haven't
-  reached show as skipped.
-- **Red:** something you wrote fails. Click into the run to see which test.
+## Other ways to work
 
-## Optional: pull requests for line-by-line feedback
-
-If you'd rather get comments on specific lines, the way code review works at most jobs:
-
-```bash
-git switch -c step-4
-# work, commit
-git push -u origin step-4
-```
-
-Open a pull request from `step-4` into `model-serving` on GitHub, then tell Claude
-"review my PR". The comments appear on the PR, CI shows on it, and you merge it
-when you're happy. It's a little more ceremony, but it's real practice for how
-teams work.
+- **From claude.ai or the Claude app, without a Codespace:** commit and push,
+  then say "review". Claude pulls your latest commits instead of reading live files.
+- **Pull requests, for line-by-line comments** (the way most teams review code):
+  `git switch -c step-4`, commit, `git push -u origin step-4`, open a PR into
+  `model-serving`, then say "review my PR".
 
 ## If something goes wrong
 
 | Problem | Fix |
 |---|---|
-| `git push` is rejected ("fetch first") | Claude pushed review notes. Run `git pull`, then `git push`. |
-| A merge conflict in `docs/progress.md` | Take Claude's version: `git checkout --theirs docs/progress.md`, then commit. |
+| The `claude` command isn't found | The Codespace was created before this setup. Rebuild it (setup step 1). |
+| `git push` is rejected ("fetch first") | Run `git pull`, then `git push`. |
+| A merge conflict in `docs/progress.md` | Take the incoming version: `git checkout --theirs docs/progress.md`, then commit. |
 | Tests changed and something you'd finished is red | Claude added a test for a case you missed. The review will say which, and why. |

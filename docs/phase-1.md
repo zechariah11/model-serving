@@ -15,7 +15,9 @@ Rough time: 12–18 hours, spread over two or three weeks.
 - **Think:** questions to answer in [`journal.md`](../journal.md) before moving on.
 - **Go deeper** (optional): how this shows up in production systems, and what to read next.
 
-When you finish a step, push it and ask for a review (see [`workflow.md`](workflow.md)).
+Keep `uv run ptw .` running so tests rerun on every save. Say "review" to Claude
+whenever you want feedback, and "checkpoint" when a step is done
+(see [`workflow.md`](workflow.md)).
 
 ## Before you start
 

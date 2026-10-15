@@ -1,6 +1,6 @@
 ---
 name: mentor-review
-description: Review the learner's latest pushed work on the current step of this learning project, give mentor-style feedback (hints, not fixes), and update docs/progress.md. Use when the learner says "review", "check my work", "I pushed", "feedback", or similar.
+description: Review the learner's latest pushed work on the current step of this learning project, give mentor-style feedback (hints, not fixes), and update docs/progress.md. Also makes checkpoint commits. Use when the learner says "review", "check my work", "I pushed", "feedback", "checkpoint", or similar.
 ---
 
 # Mentor review
@@ -15,8 +15,18 @@ git fetch origin model-serving
 git status -sb
 ```
 
-- If the local branch is behind and has no local changes, `git merge --ff-only origin/model-serving`.
-- Read `docs/progress.md` for the current step, the last reviewed commit, and open items.
+Read `docs/progress.md` for the current step, the last reviewed commit, and open items.
+
+**Live mode (the usual case):** you are running inside the learner's Codespace,
+so `git status` shows their uncommitted edits. Review the working tree as it is
+now; don't ask them to commit first.
+- Scope = `git diff <last reviewed>` (committed and uncommitted changes together)
+  plus any untracked files in `loadgen/`, `journal.md`, and `results/`.
+- If the branch is behind the remote, mention it, but don't pull over their
+  uncommitted work.
+
+**Remote mode:** the working tree is clean and the learner pushed from elsewhere.
+- If behind, `git merge --ff-only origin/model-serving`.
 - Scope = `git log --oneline <last reviewed>..HEAD` and `git diff <last reviewed>..HEAD`.
 - If the learner names a pull request instead, review that PR's diff and comment
   on GitHub, with the same rules.
@@ -66,15 +76,32 @@ If you found a bug the tests don't catch:
 
 If a doc was unclear or wrong, fix it in the same commit.
 
-## 6. Update progress and push
+## 6. Update progress
 
-Edit `docs/progress.md`: current step, last reviewed commit (the learner's latest),
-open items checked off or added, strengths noticed, and a new row in History.
+Edit `docs/progress.md`: current step, open items checked off or added, strengths
+noticed, and a new row in History.
 
-```bash
-git add docs/progress.md tests/ docs/ loadgen/*.py   # loadgen only for docstring changes
-git commit -m "progress: review step N"
-git push origin model-serving
-```
+- **Live mode:** leave the edit uncommitted. It goes into the next checkpoint
+  along with the learner's work. Record the reviewed commit as `HEAD` plus
+  "(uncommitted)".
+- **Remote mode:** set the last reviewed commit to the learner's latest, then:
 
-Tell the learner to `git pull` before continuing.
+  ```bash
+  git add docs/progress.md tests/ docs/ loadgen/*.py   # loadgen only for docstring changes
+  git commit -m "progress: review step N"
+  git push origin model-serving
+  ```
+
+  Tell the learner to `git pull` before continuing.
+
+## Checkpoints
+
+When the learner says "checkpoint" (often "checkpoint step N"):
+1. Run `uv run pytest -rs` and report the result. Checkpoint even if something
+   is red, but say so.
+2. Show `git status` and stage the learner's work plus `docs/progress.md`.
+   Leave out anything that looks accidental (large files, secrets, editor clutter).
+3. Commit with a message that starts with the step: `step N: <what they did>`,
+   written from their changes.
+4. `git pull --no-rebase origin model-serving` if behind, then `git push origin model-serving`.
+5. Set "last reviewed commit" in `docs/progress.md` to the new commit next time you update it.
