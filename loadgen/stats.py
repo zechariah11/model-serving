@@ -72,7 +72,7 @@ def summarize(results: list[RequestResult], concurrency: int, wall_s: float) -> 
         if not result.ok:
             errors += 1
         else:
-            if result.ttft_s != None:
+            if result.ttft_s is not None:
                 ttft_metrics.append(result.ttft_s)
             latency_metrics.append(result.total_s)
             all_tokens += result.n_tokens
