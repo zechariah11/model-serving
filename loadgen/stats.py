@@ -72,7 +72,8 @@ def summarize(results: list[RequestResult], concurrency: int, wall_s: float) -> 
         if not result.ok:
             errors += 1
         else:
-            ttft_metrics.append(result.ttft_s)
+            if result.ttft_s != None:
+                ttft_metrics.append(result.ttft_s)
             latency_metrics.append(result.total_s)
             all_tokens += result.n_tokens
             if result.n_tokens >= 2:
@@ -82,11 +83,11 @@ def summarize(results: list[RequestResult], concurrency: int, wall_s: float) -> 
         concurrency,
         requests_sent,
         errors,
-        percentile(ttft_metrics, 50) if errors < requests_sent else float("nan"),
-        percentile(ttft_metrics, 99) if errors < requests_sent else float("nan"),
-        percentile(latency_metrics, 50) if errors < requests_sent else float("nan"),
-        percentile(latency_metrics, 99) if errors < requests_sent else float("nan"),
-        percentile(tpot_metrics, 50) * 1000 if errors < requests_sent else float("nan"),
+        percentile(ttft_metrics, 50) if ttft_metrics else float("nan"),
+        percentile(ttft_metrics, 99) if ttft_metrics else float("nan"),
+        percentile(latency_metrics, 50) if latency_metrics else float("nan"),
+        percentile(latency_metrics, 99) if latency_metrics else float("nan"),
+        percentile(tpot_metrics, 50) * 1000 if tpot_metrics else float("nan"),
         all_tokens / wall_s
     )
 
