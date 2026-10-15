@@ -2,16 +2,14 @@
 
 Claude updates this after each review. You don't need to edit it.
 
-**Current step:** Phase 1, Step 2 — fixing review items
-**Last reviewed commit:** `4d8940a`
+**Current step:** Phase 1, Step 3 — look at the stream
+**Last reviewed commit:** `d34b5c1`
 
 ## Open items
 
-- [ ] `summarize()`: crashes when every successful request has fewer than 2 tokens,
-      because the "nothing to take a percentile of" check looks at the error count,
-      not at each list. Test: `test_time_per_token_is_nan_when_no_request_has_two_tokens`
-- [ ] `summarize()`: a successful request with no text (`ttft_s=None`) breaks the
-      sort. Test: `test_success_without_text_has_no_first_token`
+- [x] `summarize()`: crashes when every successful request has fewer than 2 tokens
+- [x] `summarize()`: a successful request with no text (`ttft_s=None`) breaks the sort
+- [ ] Style (small): compare with `None` using `is not None`, not `!= None`
 - [ ] Journal, Step 2 (optional): add the positional-vs-aggregate point and the
       1-in-100 vs 2-in-100 case
 
@@ -20,9 +18,12 @@ Claude updates this after each review. You don't need to edit it.
 - Handles the last-index edge case in `percentile()` (p = 100) without going out of range
 - Gives an example in the journal and gets the arithmetic right
 - Turned off editor autocomplete to practice writing code unaided
+- Fixed both review bugs at the root cause (each list checked on its own) instead
+  of patching each symptom separately
 
 ## History
 
 | Date | Step | Commit | Notes |
 |---|---|---|---|
 | 2026-10-15 | 2 | `4d8940a` | `percentile()` correct. `summarize()` passes the original tests; two edge cases added as new tests. Discussed why p99 misses one slow request in 100. |
+| 2026-10-15 | 2 | `d34b5c1` | Both edge cases fixed; all 18 stats tests pass. Step 2 done. |
