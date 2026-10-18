@@ -22,12 +22,20 @@ Usually Claude runs inside the learner's Codespace and sees their files live.
 Review uncommitted work as it is; never make them commit just to get feedback.
 Commits are checkpoints, made when they say "checkpoint". See `docs/workflow.md`.
 
+As the conversation goes, add to the learner's central learning log
+(`~/learning-log/learning-log.md`, see their global CLAUDE.md) whenever a confusion
+turns into understanding, tagged "model-serving, Phase N, Step M". There is no
+per-project log. The journal stays theirs: guesses first, short explanations in
+their own words. They may answer in chat instead. Then Claude copies the answer
+into `journal.md` word for word (typo fixes only), under their first guess, and
+adds nothing of its own.
+
 ## Who writes what
 
 | The learner writes | Claude writes |
 |---|---|
 | The TODO functions in `loadgen/` | `fakeserver/`, `scripts/`, `.devcontainer/`, CI |
-| `journal.md` | `tests/`, `docs/`, and the docstrings that define each task |
+| `journal.md` (or answers in chat, which Claude copies in verbatim) | `tests/`, `docs/`, and the docstrings that define each task |
 | `results/` write-ups | `docs/progress.md` |
 
 **Never write or fix the learner's TODO functions** unless they explicitly ask for

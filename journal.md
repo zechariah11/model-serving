@@ -13,7 +13,11 @@ p99 metric is extremely significant because average as a metric does not capture
 
 - First chunk: The first chunk is {"role": "assistant", "content": ""}, and it's sent immediately. 
 - What `-N` does: I can't find where -N is. 
+  - Later: The server doesn't know, as it just deals with what it receives. When you run curl to v1/chat/completions, you're first making a request to the fake server and then buffering the output received from it.
+  - If a client buffered like that: TTFT would be 0.25, which includes the time it spent buffering.
 - A slot, in my own words: Is it equivalent to the number of threads the process for this fake server can run? 
+  - Later: A slot is implemented as a semaphore and enforces how many requests can be processed simultaneously. When all slots are busy, other tasks just wait in the queue.
+- `"stream": false`: A real server might support both options. Some might be scheduled tasks that are not time sensitive and more of an event trigger once the output is generated from the LLM server. These event triggers might want the full data instead of streaming in order to process it properly. From a client perspective, streaming set to false would not be able to measure TTFT, since all tokens need to be generated to respond back to the client.
 
 ### Step 4 — Timing one request
 
